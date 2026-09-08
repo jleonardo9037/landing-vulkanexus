@@ -3,39 +3,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const STATS = [
+interface StatItem {
+  valor: string;
+  etiqueta: string;
+  subtexto: string;
+}
+
+const STATS: StatItem[] = [
   {
     valor: '+70K',
     etiqueta: 'Unidades Despachadas',
-    subtexto: 'Volumen constante y stock garantizado',
+    subtexto: 'Volumen constante y stock garantizado en bodega.',
   },
   {
     valor: '82.2%',
     etiqueta: 'Entregas Exitosas',
-    subtexto: 'Efectividad en entregas y cobro contraentrega',
+    subtexto: 'Efectividad en entregas y cobro contraentrega.',
   },
   {
     valor: '24h',
     etiqueta: 'Tiempo Medio de Despacho',
-    subtexto: 'Procesamiento ultrarrápido desde bodega',
+    subtexto: 'Procesamiento ultrarrápido desde bodega central.',
   },
   {
-    valor: '< 20%',
-    etiqueta: 'Tasa de Devolución',
-    subtexto: 'Control riguroso de empaque y calidad',
+    valor: '0%',
+    etiqueta: 'Devoluciones por Calidad',
+    subtexto: 'Inspección previa unidad por unidad antes de despachar.',
   },
 ];
 
-export default function Pagina2() {
+export default function Metricas() {
   return (
-    <section className="relative py-20 bg-[#021420] overflow-hidden border-t border-[#DBDCDE]/10">
-      
-      {/* Resplandor superior de acento */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#FF3D00]/10 rounded-full blur-[140px] pointer-events-none" />
+    <section id="metricas" className="relative py-20 bg-[#021420] overflow-hidden border-t border-[#DBDCDE]/10">
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#FF3D00]/10 rounded-full blur-[140px] pointer-events-none" 
+        aria-hidden="true" 
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* ENCABEZADO IMPACTANTE */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -57,7 +62,6 @@ export default function Pagina2() {
           </motion.h2>
         </div>
 
-        {/* REJILLA DE TARJETAS DE MÉTRICAS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {STATS.map((stat, index) => (
             <motion.div
@@ -69,22 +73,18 @@ export default function Pagina2() {
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               className="relative group p-8 rounded-2xl bg-gradient-to-b from-[#DBDCDE]/10 to-[#DBDCDE]/5 border border-[#DBDCDE]/15 hover:border-[#FF3D00]/50 backdrop-blur-xl transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between"
             >
-              {/* Luz sutil al hacer hover */}
               <div className="absolute -top-12 -right-12 w-24 h-24 bg-[#FF3D00]/20 rounded-full blur-2xl group-hover:scale-150 transition-all duration-500 pointer-events-none" />
 
               <div className="space-y-3 relative z-10">
-                {/* Número Grande con Degradado o Color Destacado */}
                 <span className="block text-4xl sm:text-5xl font-black tracking-tight text-[#FF3D00] font-mono">
                   {stat.valor}
                 </span>
 
-                {/* Título de la métrica */}
                 <h3 className="text-base font-bold text-white uppercase tracking-wider">
                   {stat.etiqueta}
                 </h3>
               </div>
 
-              {/* Subtexto explicativo */}
               <p className="text-xs text-[#DBDCDE]/70 leading-relaxed pt-4 border-t border-[#DBDCDE]/10 mt-6 relative z-10">
                 {stat.subtexto}
               </p>

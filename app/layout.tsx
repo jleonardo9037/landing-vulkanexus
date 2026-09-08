@@ -1,11 +1,18 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
 });
+
+export const viewport: Viewport = {
+  themeColor: '#021420',
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: 'VULKANEXUS GROUP | Proveedor Oficial Dropi Latam',
@@ -14,6 +21,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'VULKANEXUS GROUP' }],
   icons: {
     icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'VULKANEXUS GROUP | Proveedor Oficial Dropi Latam',
+    description: 'Productos ganadores con alta rotación y menor tasa de devolución en Latam.',
+    type: 'website',
+    locale: 'es_CO',
   },
 };
 
