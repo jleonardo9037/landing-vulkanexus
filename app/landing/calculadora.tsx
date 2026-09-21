@@ -14,7 +14,8 @@ import {
   ShieldAlert,
   Zap,
   TrendingDown,
-  DollarSign
+  DollarSign,
+  Calculator
 } from 'lucide-react';
 
 interface MonedaConfig {
@@ -226,7 +227,7 @@ export default function CalculadoraDropshipper() {
   const formatoMoneda = (monto: number) => 
     formatearMonedaLocal(monto, monedaSeleccionada);
 
-  // CÁLCULOS FINANCIEROS Y DE ABSORCIÓN DE PÉRDIDAS
+  // CÁLCULOS FINANCIEROS
   const metricasDropshipper = useMemo(() => {
     const totalGenerados = Math.max(1, Number(dropUnidades) || 1);
     const cProducto = Math.max(0, Number(dropCostoProducto) || 0);
@@ -238,11 +239,16 @@ export default function CalculadoraDropshipper() {
     const udsDevueltas = totalGenerados * pctDev;
     const udsEntregadas = totalGenerados - udsDevueltas;
 
-    const costoDevolucionPorPaquete = fIda * 1.8;
-    const costoTotalFletesDevueltos = udsDevueltas * costoDevolucionPorPaquete;
-    const cpaTotalPerdidoDevoluciones = udsDevueltas * cpaPorPedido;
+    // Desglose Unitario de Devolución
+    const fleteDevolucionUnidad = fIda * 1.8;
+    const cpaPerdidoUnidad = cpaPorPedido;
+
+    // Desglose Global de Devolución
+    const costoTotalFletesDevueltos = udsDevueltas * fleteDevolucionUnidad;
+    const cpaTotalPerdidoDevoluciones = udsDevueltas * cpaPerdidoUnidad;
     const perdidaTotalDevoluciones = costoTotalFletesDevueltos + cpaTotalPerdidoDevoluciones;
 
+    // Absorción
     const gastoTotalAds = totalGenerados * cpaPorPedido;
     const cpaEfectivoPorEntregado = udsEntregadas > 0 ? (gastoTotalAds / udsEntregadas) : 0;
     const castigoFletesUnitarioEfectivo = udsEntregadas > 0 ? (costoTotalFletesDevueltos / udsEntregadas) : 0;
@@ -258,12 +264,15 @@ export default function CalculadoraDropshipper() {
 
     const roasObjetivoReal = cpaEfectivoPorEntregado > 0 ? (precioVentaSugeridoFinal / cpaEfectivoPorEntregado) : 0;
 
+    // Métricas Globales Operaciones
+    const costoTotalProductosEntregados = cProducto * udsEntregadas;
+    const costoTotalFletesEntregados = fIda * udsEntregadas;
+
     return {
       qtyTotal: totalGenerados,
       qtyEntregadas: Math.round(udsEntregadas),
       qtyDevueltas: Math.round(udsDevueltas),
       fleteIda: fIda,
-      cpaPorPedido,
       cpaEfectivoPorEntregado,
       castigoFletesUnitarioEfectivo,
       costoTotalFletesDevueltos,
@@ -273,7 +282,10 @@ export default function CalculadoraDropshipper() {
       gananciaNetaUnidad,
       ventaTotalProyectada,
       gananciaNetaTotal,
-      roasObjetivoReal
+      roasObjetivoReal,
+      costoTotalProductosEntregados,
+      costoTotalFletesEntregados,
+      gastoTotalAds
     };
   }, [dropUnidades, dropCostoProducto, dropFletePromedio, dropCpaAds, dropTasaDevolucion, dropMargenDeseado]);
 
@@ -470,87 +482,11 @@ export default function CalculadoraDropshipper() {
               2. Resultado y Métricas Objetivo
             </span>
 
-            {/* TARJETAS SECUNDARIAS ANIMADAS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              
-              {/* TARJETA 1: PÉRDIDA POR CANCELACIONES */}
-              <motion.div 
-                whileHover={{ y: -4, scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-[#021420] p-5 rounded-2xl border border-[#FF3D00]/40 flex flex-col justify-between space-y-2 shadow-lg shadow-[#FF3D00]/5 hover:shadow-[#FF3D00]/20 hover:border-[#FF3D00] transition-colors duration-300 cursor-pointer"
-              >
-                <span className="text-[11px] text-[#FF3D00] font-bold uppercase tracking-wider flex items-center justify-between">
-                  <span className="flex items-center gap-1">
-                    <TrendingDown className="w-3.5 h-3.5" />
-                    Pérdida por Devoluciones
-                  </span>
-                  <Tooltip contenido="Dinero invertido en fletes no cobrados y pauta publicitaria quemada por pedidos cancelados." />
-                </span>
-
-                <span className="text-2xl sm:text-3xl font-black font-mono text-[#FF3D00]">
-                  <AnimatedNumber 
-                    value={metricasDropshipper.perdidaTotalDevoluciones} 
-                    formatter={(v) => formatoMoneda(v)} 
-                  />
-                </span>
-
-                <div className="border-t border-[#FF3D00]/20 pt-2 space-y-1 text-[11px] font-mono text-[#DBDCDE]/80">
-                  <div className="flex justify-between">
-                    <span>Fletes Devueltos (1.8x):</span>
-                    <span className="text-white font-bold">{formatoMoneda(metricasDropshipper.costoTotalFletesDevueltos)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>CPA Ads Quemado:</span>
-                    <span className="text-white font-bold">{formatoMoneda(metricasDropshipper.cpaTotalPerdidoDevoluciones)}</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* TARJETA 2: ROAS OBJETIVO */}
-              <motion.div 
-                whileHover={{ y: -4, scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-[#021420] p-5 rounded-2xl border border-[#DBDCDE]/30 flex flex-col justify-between space-y-2 shadow-lg hover:border-[#FF3D00]/50 hover:shadow-[#FF3D00]/10 transition-colors duration-300 cursor-pointer"
-              >
-                <span className="text-[11px] text-white font-bold uppercase tracking-wider flex items-center justify-between">
-                  <span className="flex items-center gap-1">
-                    <Target className="w-3.5 h-3.5 text-[#FF3D00]" />
-                    ROAS Mínimo Objetivo
-                  </span>
-                  <Tooltip contenido="Relación Mínima en Anuncios para no perder dinero y mantener el margen deseado." />
-                </span>
-
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    <AnimatedNumber 
-                      value={metricasDropshipper.roasObjetivoReal} 
-                      formatter={(v) => `${v.toFixed(2)}x`} 
-                    />
-                  </span>
-                  <span className="text-xs text-[#FF3D00] font-bold font-mono">
-                    (Mínimo Exigido)
-                  </span>
-                </div>
-
-                <div className="border-t border-[#DBDCDE]/10 pt-2 text-[11px] font-mono text-[#DBDCDE]/80 space-y-1">
-                  <div className="flex justify-between">
-                    <span>• Órdenes Entregadas:</span>
-                    <span className="text-white font-bold">{metricasDropshipper.qtyEntregadas} Uds</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>• Órdenes Canceladas:</span>
-                    <span className="text-[#FF3D00] font-bold">{metricasDropshipper.qtyDevueltas} Uds</span>
-                  </div>
-                </div>
-              </motion.div>
-
-            </div>
-
-            {/* TARJETA 3: PRECIO SUGERIDO DESTACADO ANIMADO */}
+            {/* TARJETA PRINCIPAL: PRECIO SUGERIDO (CON ROAS MÍNIMO INTEGRADO) */}
             <motion.div 
-              whileHover={{ scale: 1.015 }}
+              whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="bg-[#021420] p-6 sm:p-8 rounded-2xl border-2 border-[#FF3D00] text-center space-y-3 shadow-2xl shadow-[#FF3D00]/10 hover:shadow-[#FF3D00]/25 transition-all duration-300 cursor-pointer relative overflow-hidden"
+              className="bg-[#021420] p-6 sm:p-8 rounded-2xl border-2 border-[#FF3D00] text-center space-y-4 shadow-2xl shadow-[#FF3D00]/10 hover:shadow-[#FF3D00]/25 transition-all duration-300 cursor-pointer relative overflow-hidden"
             >
               <span className="text-xs font-bold text-[#DBDCDE] uppercase tracking-widest block flex items-center justify-center gap-1.5">
                 <DollarSign className="w-4 h-4 text-[#FF3D00]" />
@@ -558,42 +494,47 @@ export default function CalculadoraDropshipper() {
                 <Tooltip contenido="Precio recomendado para proteger tu margen neto absorbiendo cancelaciones y pauta total." />
               </span>
               
-              <span className="text-3xl sm:text-5xl font-black font-mono text-[#FF3D00] block my-2">
+              <span className="text-4xl sm:text-6xl font-black font-mono text-[#FF3D00] block my-2">
                 <AnimatedNumber 
                   value={metricasDropshipper.precioVentaSugeridoFinal} 
                   formatter={(v) => formatoMoneda(v)} 
                 />
               </span>
               
-              <div className="bg-[#DBDCDE]/10 inline-block px-4 py-2 rounded-xl border border-[#DBDCDE]/20">
-                <span className="text-xs text-white font-semibold">
-                  Ganancia Neta por Unidad Entregada:{" "}
-                  <span className="text-[#FF3D00] font-mono font-bold text-sm">
-                    <AnimatedNumber 
-                      value={metricasDropshipper.gananciaNetaUnidad} 
-                      formatter={(v) => formatoMoneda(v)} 
-                    />
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <div className="bg-[#DBDCDE]/10 px-4 py-2 rounded-xl border border-[#DBDCDE]/20">
+                  <span className="text-xs text-white font-semibold">
+                    Ganancia Neta por Ud.:{" "}
+                    <span className="text-[#FF3D00] font-mono font-bold text-sm">
+                      <AnimatedNumber 
+                        value={metricasDropshipper.gananciaNetaUnidad} 
+                        formatter={(v) => formatoMoneda(v)} 
+                      />
+                    </span>
                   </span>
-                </span>
+                </div>
+
+                {/* ROAS MÍNIMO INTEGRADO */}
+                <div className="bg-[#FF3D00]/10 px-4 py-2 rounded-xl border border-[#FF3D00]/30 flex items-center gap-2">
+                  <Target className="w-4 h-4 text-[#FF3D00]" />
+                  <span className="text-xs text-white font-semibold">
+                    ROAS Mínimo Objetivo:{" "}
+                    <span className="text-[#FF3D00] font-mono font-bold text-sm">
+                      <AnimatedNumber 
+                        value={metricasDropshipper.roasObjetivoReal} 
+                        formatter={(v) => `${v.toFixed(2)}x`} 
+                      />
+                    </span>
+                  </span>
+                </div>
               </div>
             </motion.div>
 
-            {/* TOTALES ACUMULADOS */}
-            <div className="bg-[#021420] border border-[#DBDCDE]/20 p-5 rounded-2xl space-y-3 font-mono shadow-xl">
-              <div className="flex justify-between items-center text-xs border-b border-[#DBDCDE]/10 pb-2">
-                <span className="text-[#DBDCDE] uppercase font-bold">Venta Total Real ({metricasDropshipper.qtyEntregadas} entregadas):</span>
-                <span className="text-white font-black text-base">{formatoMoneda(metricasDropshipper.ventaTotalProyectada)}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs pt-1">
-                <span className="text-[#FF3D00] uppercase font-extrabold tracking-wider">Ganancia Neta Acumulada Libre:</span>
-                <span className="text-[#FF3D00] font-black text-base bg-[#FF3D00]/10 px-3 py-1 rounded-lg border border-[#FF3D00]/30">{formatoMoneda(metricasDropshipper.gananciaNetaTotal)}</span>
-              </div>
-            </div>
-
-            {/* DESGLOSE FINANCIERO */}
+            {/* DESGLOSE UNITARIO COMPLETO (POR ORDEN ENTREGADA) */}
             <div className="bg-[#021420] p-4 rounded-xl border border-[#DBDCDE]/10 space-y-2 text-xs font-mono">
-              <span className="text-[10px] text-[#DBDCDE]/60 font-bold uppercase block mb-1">
-                Desglose unitario para orden entregada ({formatoMoneda(metricasDropshipper.precioVentaSugeridoFinal)}):
+              <span className="text-[10px] text-[#DBDCDE]/60 font-bold uppercase block mb-1 flex items-center gap-1">
+                <Calculator className="w-3.5 h-3.5 text-[#FF3D00]" />
+                Desglose Unitario por Orden Entregada ({formatoMoneda(metricasDropshipper.precioVentaSugeridoFinal)}):
               </span>
               <div className="flex justify-between text-[#DBDCDE]">
                 <span>• Costo Producto (Bodega):</span>
@@ -614,6 +555,55 @@ export default function CalculadoraDropshipper() {
               <div className="flex justify-between text-white font-bold border-t border-[#DBDCDE]/10 pt-2 text-sm">
                 <span>(=) Ganancia Neta Libre ({dropMargenDeseado}%):</span>
                 <span className="text-[#FF3D00]">{formatoMoneda(metricasDropshipper.gananciaNetaUnidad)}</span>
+              </div>
+            </div>
+
+            {/* DESGLOSE GLOBAL COMPLETO (TODA LA OPERACIÓN) */}
+            <div className="bg-[#021420] border border-[#DBDCDE]/20 p-5 rounded-2xl space-y-3 font-mono shadow-xl">
+              <span className="text-[10px] text-[#DBDCDE]/60 font-bold uppercase block border-b border-[#DBDCDE]/10 pb-2">
+                Desglose Global de la Operación ({metricasDropshipper.qtyTotal} Órdenes Totales)
+              </span>
+
+              {/* INGRESOS GLOBALES */}
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-[#DBDCDE] uppercase font-bold">(+) Venta Total Real ({metricasDropshipper.qtyEntregadas} entregadas):</span>
+                <span className="text-white font-black text-base">{formatoMoneda(metricasDropshipper.ventaTotalProyectada)}</span>
+              </div>
+
+              {/* COSTOS GLOBALES */}
+              <div className="space-y-1 text-[11px] text-[#DBDCDE]/70 border-t border-b border-[#DBDCDE]/10 py-2">
+                <div className="flex justify-between">
+                  <span>(-) Costo de Productos ({metricasDropshipper.qtyEntregadas} uds):</span>
+                  <span>{formatoMoneda(metricasDropshipper.costoTotalProductosEntregados)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>(-) Fletes de Envíos Entregados ({metricasDropshipper.qtyEntregadas} uds):</span>
+                  <span>{formatoMoneda(metricasDropshipper.costoTotalFletesEntregados)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>(-) Inversión Publicitaria Total ({metricasDropshipper.qtyTotal} ads):</span>
+                  <span>{formatoMoneda(metricasDropshipper.gastoTotalAds)}</span>
+                </div>
+                <div className="flex justify-between text-[#FF3D00]">
+                  <span>(-) Fletes Devoluciones ({metricasDropshipper.qtyDevueltas} devueltas x 1.8):</span>
+                  <span>{formatoMoneda(metricasDropshipper.costoTotalFletesDevueltos)}</span>
+                </div>
+              </div>
+
+              {/* TOTAL PÉRDIDA Y GANANCIA NETAS */}
+              <div className="flex justify-between items-center text-xs text-[#FF3D00] font-semibold">
+                <span className="flex items-center gap-1 uppercase">
+                  <TrendingDown className="w-3.5 h-3.5" />
+                  (-) Impacto Total Devoluciones ({metricasDropshipper.qtyDevueltas} canceladas):
+                </span>
+                <span className="font-bold">{formatoMoneda(metricasDropshipper.perdidaTotalDevoluciones)}</span>
+              </div>
+
+              <div className="flex justify-between items-center text-xs pt-2 border-t border-[#DBDCDE]/10">
+                <span className="text-[#FF3D00] uppercase font-extrabold tracking-wider">Ganancia Neta Acumulada Libre:</span>
+                <span className="text-[#FF3D00] font-black text-base bg-[#FF3D00]/10 px-3 py-1 rounded-lg border border-[#FF3D00]/30">
+                  {formatoMoneda(metricasDropshipper.gananciaNetaTotal)}
+                </span>
               </div>
             </div>
 
