@@ -3,6 +3,7 @@ import Pagina2 from './landing/pagina2';
 import Pagina3 from './landing/pagina3';
 import Pagina4 from './landing/pagina4';
 import Contacto from './landing/contacto';
+import Calculadora from './landing/calculadora';
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Pagina2 />
       <Pagina3 />
       <Pagina4 />
+      <Calculadora />
       <Contacto />
     </main>
   );
