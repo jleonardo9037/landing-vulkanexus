@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavLink {
   name: string;
   href: string;
+  esRutaLocal?: boolean;
 }
 
 const NAV_LINKS: NavLink[] = [
+  { name: 'Calculadora', href: '#calculadora'},
   { name: 'Rendimiento', href: '#metricas' },
   { name: 'Beneficios', href: '#beneficios' },
   { name: 'Cobertura', href: '#cobertura' },
@@ -24,7 +27,7 @@ export default function Menu() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#021420]/85 backdrop-blur-md border-b border-[#DBDCDE]/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
-        <a href="#" className="flex items-center gap-3 group" aria-label="Ir al inicio">
+        <Link href="/" className="flex items-center gap-3 group" aria-label="Ir al inicio">
           <div className="relative w-12 h-12 transition-transform duration-300 group-hover:scale-105">
             <Image
               src="/Isologo.png"
@@ -38,17 +41,27 @@ export default function Menu() {
           <span className="text-lg font-black tracking-wider text-white uppercase font-sans">
             Vulkanexus <span className="text-[#FF3D00]">Group</span>
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-xs font-bold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
-            >
-              {link.name}
-            </a>
+            link.esRutaLocal ? (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-xs font-bold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
+              >
+                {link.name}
+              </Link>
+            ) : (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-xs font-bold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
+              >
+                {link.name}
+              </a>
+            )
           ))}
           
           <motion.a
@@ -91,14 +104,25 @@ export default function Menu() {
             className="md:hidden bg-[#021420] border-b border-[#DBDCDE]/10 px-4 pt-2 pb-6 space-y-4 overflow-hidden"
           >
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="block text-sm font-semibold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
-              >
-                {link.name}
-              </a>
+              link.esRutaLocal ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block text-sm font-semibold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block text-sm font-semibold uppercase tracking-wider text-[#DBDCDE] hover:text-[#FF3D00] transition-colors"
+                >
+                  {link.name}
+                </a>
+              )
             ))}
 
             <motion.a
