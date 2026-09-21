@@ -588,6 +588,10 @@ export default function CalculadoraDropshipper() {
                   <span>(-) Fletes Devoluciones ({metricasDropshipper.qtyDevueltas} devueltas x 1.8):</span>
                   <span>{formatoMoneda(metricasDropshipper.costoTotalFletesDevueltos)}</span>
                 </div>
+                <div className="flex justify-between text-[#FF3D00]">
+                  <span>(-) Publicidad "Quemada" ({metricasDropshipper.qtyDevueltas} devueltas x CPA):</span>
+                  <span>{formatoMoneda(metricasDropshipper.cpaTotalPerdidoDevoluciones)}</span>
+                </div>
               </div>
 
               {/* TOTAL PÉRDIDA Y GANANCIA NETAS */}
