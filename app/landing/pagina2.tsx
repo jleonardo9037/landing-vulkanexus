@@ -1,97 +1,171 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
-interface StatItem {
-  valor: string;
-  etiqueta: string;
-  subtexto: string;
+interface BeneficioItem {
+  metric: string;
+  titulo: string;
+  descripcion: string;
+  icon: React.ReactNode;
 }
 
-const STATS: StatItem[] = [
+const BENEFICIOS: BeneficioItem[] = [
   {
-    valor: '+70K',
-    etiqueta: 'Unidades Despachadas',
-    subtexto: 'Volumen constante y stock garantizado en bodega.',
+    metric: '> 30% Margen',
+    titulo: 'Margen Neto Superior al 30%',
+    descripcion:
+      'Excelente rentabilidad por unidad vendida, garantizando un retorno de inversión rápido y competitivo frente a la media del mercado.',
+    icon: (
+      <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
   },
   {
-    valor: '82.2%',
-    etiqueta: 'Entregas Exitosas',
-    subtexto: 'Efectividad en entregas y cobro contraentrega.',
+    metric: 'Cada 30-45 Días',
+    titulo: 'Flujo de Caja Constante',
+    descripcion:
+      'Tratamiento continuo con alta recurrencia. El cliente regresa periódicamente asegurando un ciclo de ingresos estable, predecible y recurrente.',
+    icon: (
+      <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    ),
   },
   {
-    valor: '24h',
-    etiqueta: 'Tiempo Medio de Despacho',
-    subtexto: 'Procesamiento ultrarrápido desde bodega central.',
+    metric: '< 20% Devolución',
+    titulo: 'Riesgo Mínimo Operativo',
+    descripcion:
+      'La altísima tasa de satisfacción y la calidad demostrada del producto reducen drásticamente los reclamos y devoluciones, protegiendo tu margen operativo.',
+    icon: (
+      <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
   },
   {
-    valor: '0%',
-    etiqueta: 'Devoluciones por Calidad',
-    subtexto: 'Inspección previa unidad por unidad antes de despachar.',
+    metric: 'Recompensas Activas',
+    titulo: 'Incentivos y Bonos por Ventas',
+    descripcion:
+      'Programa de incentivos activo que motiva al equipo comercial a empujar la marca, acelerando significativamente la velocidad de salida en punto de venta.',
+    icon: (
+      <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
   },
 ];
 
-export default function Metricas() {
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.215, 0.61, 0.355, 1],
+    },
+  },
+};
+
+export default function Beneficios() {
   return (
-    <section id="metricas" className="relative py-20 bg-[#021420] overflow-hidden border-t border-[#DBDCDE]/10">
+    <section id="beneficios" className="py-20 bg-[#021420] border-t border-[#DBDCDE]/10 relative overflow-hidden">
+      {/* Glow de fondo */}
       <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#FF3D00]/10 rounded-full blur-[140px] pointer-events-none" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF3D00]/5 rounded-full blur-[140px] pointer-events-none" 
         aria-hidden="true" 
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+        {/* Encabezado de Sección */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <motion.h2 
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FF3D00]/10 border border-[#FF3D00]/30 text-xs font-bold uppercase tracking-widest text-[#FF3D00]"
+            transition={{ duration: 0.6 }}
+            className="text-2xl sm:text-4xl font-black uppercase text-white tracking-wide"
           >
-            <span className="w-2 h-2 rounded-full bg-[#FF3D00] animate-ping" />
-            <span>Métricas que Respaldan Tu Escala</span>
-          </motion.div>
-
-          <motion.h2
+            Ventajas <span className="text-[#FF3D00]">Financieras y Operativas</span>
+          </motion.h2>
+          <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-4xl font-black uppercase text-white tracking-tight"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-sm sm:text-base text-[#DBDCDE]/70 leading-relaxed"
           >
-            Rendimiento Logístico en <span className="text-[#FF3D00]">Números Reales</span>
-          </motion.h2>
+            Maximiza el retorno de tu inversión y protege tu flujo de caja con un modelo de negocio altamente rentable y respaldado.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STATS.map((stat, index) => (
-            <motion.div
-              key={stat.etiqueta}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="relative group p-8 rounded-2xl bg-gradient-to-b from-[#DBDCDE]/10 to-[#DBDCDE]/5 border border-[#DBDCDE]/15 hover:border-[#FF3D00]/50 backdrop-blur-xl transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between"
+        {/* Grid de Tarjetas 2x2 */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
+        >
+          {BENEFICIOS.map((item) => (
+            <motion.div 
+              key={item.titulo}
+              variants={cardVariants}
+              whileHover={{ 
+                y: -6, 
+                scale: 1.01,
+                transition: { duration: 0.2, ease: "easeOut" } 
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="relative p-8 rounded-2xl bg-[#DBDCDE]/5 border border-[#DBDCDE]/10 hover:border-[#FF3D00]/50 hover:bg-[#DBDCDE]/10 transition-all duration-300 group flex flex-col justify-between overflow-hidden shadow-xl"
             >
-              <div className="absolute -top-12 -right-12 w-24 h-24 bg-[#FF3D00]/20 rounded-full blur-2xl group-hover:scale-150 transition-all duration-500 pointer-events-none" />
+              {/* Glow interno al pasar el mouse */}
+              <div className="absolute -top-10 -right-10 w-36 h-36 bg-[#FF3D00]/15 rounded-full blur-2xl group-hover:scale-150 transition-all duration-500 pointer-events-none" />
 
-              <div className="space-y-3 relative z-10">
-                <span className="block text-4xl sm:text-5xl font-black tracking-tight text-[#FF3D00] font-mono">
-                  {stat.valor}
-                </span>
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center justify-between">
+                  {/* Icono */}
+                  <motion.div 
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                    className="p-3.5 w-fit rounded-xl bg-[#FF3D00]/10 border border-[#FF3D00]/20 text-[#FF3D00] group-hover:bg-[#FF3D00] group-hover:text-white transition-all duration-300 shadow-md"
+                  >
+                    {item.icon}
+                  </motion.div>
 
-                <h3 className="text-base font-bold text-white uppercase tracking-wider">
-                  {stat.etiqueta}
+                  {/* Badge de KPI / Métrica */}
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#FF3D00]/10 text-[#FF3D00] border border-[#FF3D00]/30 tracking-wider uppercase">
+                    {item.metric}
+                  </span>
+                </div>
+
+                {/* Título y Descripción */}
+                <h3 className="text-xl font-bold text-white tracking-wide group-hover:text-[#FF3D00] transition-colors duration-300">
+                  {item.titulo}
                 </h3>
+                <p className="text-sm text-[#DBDCDE]/70 leading-relaxed group-hover:text-[#DBDCDE] transition-colors duration-300">
+                  {item.descripcion}
+                </p>
               </div>
 
-              <p className="text-xs text-[#DBDCDE]/70 leading-relaxed pt-4 border-t border-[#DBDCDE]/10 mt-6 relative z-10">
-                {stat.subtexto}
-              </p>
+              {/* Borde inferior dinámico */}
+              <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-[#FF3D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mt-6" />
             </motion.div>
           ))}
-        </div>
-
+        </motion.div>
       </div>
     </section>
   );
