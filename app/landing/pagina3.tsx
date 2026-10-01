@@ -21,7 +21,7 @@ const STATS: StatItem[] = [
     subtexto: 'Efectividad en entregas y cobro contraentrega.',
   },
   {
-    valor: '24h',
+    valor: '8h',
     etiqueta: 'Tiempo Medio de Despacho',
     subtexto: 'Procesamiento ultrarrápido desde bodega central.',
   },
