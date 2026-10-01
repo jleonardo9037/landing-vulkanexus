@@ -15,7 +15,7 @@ const BENEFICIOS: BeneficioItem[] = [
     metric: '> 30% Margen',
     titulo: 'Margen Neto Superior al 30%',
     descripcion:
-      'Excelente rentabilidad por unidad vendida, garantizando un retorno de inversión rápido y competitivo frente a la media del mercado.',
+      'Excelente rentabilidad neta por unidad vendida. Diseñamos nuestros costos para absorber holgadamente tus costos de pauta (CPA) y dejar utilidad real en tu billetera desde el primer despacho.',
     icon: (
       <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -26,7 +26,7 @@ const BENEFICIOS: BeneficioItem[] = [
     metric: 'Cada 30-45 Días',
     titulo: 'Flujo de Caja Constante',
     descripcion:
-      'Tratamiento continuo con alta recurrencia. El cliente regresa periódicamente asegurando un ciclo de ingresos estable, predecible y recurrente.',
+      'Alta tasa de rotación y recompra periódica. Construye una base de clientes leales que recompran cada 30-45 días, estabilizando el flujo de caja de tu e-commerce mes a mes.',
     icon: (
       <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -37,7 +37,7 @@ const BENEFICIOS: BeneficioItem[] = [
     metric: '< 20% Devolución',
     titulo: 'Riesgo Mínimo Operativo',
     descripcion:
-      'La altísima tasa de satisfacción y la calidad demostrada del producto reducen drásticamente los reclamos y devoluciones, protegiendo tu margen operativo.',
+      'Blindamos tu operación con 0% de devoluciones por fallas de calidad o empaque defectuoso. Cero pesos tirados a la basura en fletes de retorno por producto dañado o reclamos de clientes.',
     icon: (
       <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -48,7 +48,7 @@ const BENEFICIOS: BeneficioItem[] = [
     metric: 'Recompensas Activas',
     titulo: 'Incentivos y Bonos por Ventas',
     descripcion:
-      'Programa de incentivos activo que motiva al equipo comercial a empujar la marca, acelerando significativamente la velocidad de salida en punto de venta.',
+      'Premiamos las tiendas que escalan. Accede a bonos en efectivo, descuentos en fletes y mejores precios de costo a medida que aumentas tu volumen diario de pedidos en Dropi.',
     icon: (
       <svg className="w-6 h-6 text-current" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
